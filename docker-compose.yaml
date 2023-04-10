@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  # Redis server service
+  redis-stack-server:
+    image: redis/redis-stack-server # Use the official Redis Docker image
+    ports:
+      - '${REDIS_PORT:-6379}:6379' # Map Redis server port 6379 to host port 6379
+    environment:
+      REDISEARCH_ARGS: CONCURRENT_WRITE_MODE
+      WIPE_REDIS_ON_START: 'False'
+      REDIS_ARGS: "--requirepass ${REDIS_PASSWORD}"
+    env_file:
+      - .env
+    volumes:
+      - redis-data:/var/lib/redis
+    #  - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+  # Redis Commander web interface service
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOST=redis-stack-server
+      - REDIS_PORT=${REDIS_PORT:-6379}
+      - REDIS_WEB_PORT=${REDIS_WEB_PORT:-8001}
+    ports:
+      - '${REDIS_WEB_PORT}:8081' # Map Redis Commander port 8081 to host port, using the value of REDIS_WEB_PORT or defaulting to 8001
+    depends_on:
+      - redis-stack-server
+    env_file:
+      - .env
+
+  # Auto-GPT service
+  auto-gpt:
+    build: .
+    depends_on:
+      - redis-stack-server
+    env_file:
+      - .env
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      # You can use an absolute path instead of a relative one if needed
+      # - /path/to/config.yaml:/app/config.yaml
+
+# Define named volumes for Redis data storage (optional)
+volumes:
+  redis-data:
+    driver: local
