@@ -33,7 +33,7 @@ class Config(metaclass=Singleton):
 
     def __init__(self):
         """Initialize the Config class"""
-        self.debug_mode_mode = False
+        self.debug_mode = False
         self.continuous_mode = False
         self.speak_mode = False
 
@@ -131,6 +131,6 @@ class Config(metaclass=Singleton):
         """Set the Pinecone region value."""
         self.pinecone_region = value
 
-    def set_debug_mode_mode(self, value: bool):
+    def set_debug_mode(self, value: bool):
         """Set the debug_mode mode value."""
-        self.debug_mode_mode = value
+        self.debug_mode = value
