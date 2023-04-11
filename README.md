@@ -53,6 +53,8 @@ Your support is greatly appreciated
   - [⚠️ Limitations](#️-limitations)
   - [🛡 Disclaimer](#-disclaimer)
   - [🐦 Connect with Us on Twitter](#-connect-with-us-on-twitter)
+  - [Development](#development)
+    - [Windows Conda](#windows-conda)
 
 ## 🚀 Features
 
@@ -120,16 +122,13 @@ Do the following steps to run Auto-GPT in a Docker container:
     ```Bash
     # To build the docker image
     docker-compose build
-
-    # Starting Up Redis Stack
-    docker-compose up redis-stack-server redis-commander -d
     ```
 
 4. Running Our Container
 
     ```Bash
     # Enter the container Auto-GPT -- With a speaker
-    docker-compose run --rm --name Assistant1 auto-gpt python main.py
+    docker-compose run --rm --name Assistant1 auto-gpt
 
     # With Speaker
     docker-compose run --rm --name Assistant1 auto-gpt python main.py --speaker
@@ -138,6 +137,9 @@ Do the following steps to run Auto-GPT in a Docker container:
 5. Shutdown & Restart
 
     ```Bash
+    # To shutdown the container &
+    docker-compose down
+    
     # To remove all stopped containers:
     docker container prune
 
@@ -150,7 +152,6 @@ Do the following steps to run Auto-GPT in a Docker container:
 
 ## 🔧 Usage
 
-
 ### Preparing Environment
 
 We need to do some manual setup before we can run the program.
@@ -161,13 +162,34 @@ We need to do some manual setup before we can run the program.
    self.use_azure = os.getenv("USE_AZURE") == 'False'
    ```
 
-2. If you are using other source of memory mangment then change self.memory_back end to your memory desired backend. The options toda are local, redis, and pinecone.
+2. If you are using other source of memory management then change self.memory_back end to your memory desired backend. The options today are local, redis, and pinecone.
 
    ```python
    self.memory_backend = os.getenv("MEMORY_BACKEND", 'redis')
    ```
 
+      2.1. For Redis server stack. You need to provide password in 
+          **self.redis_password = os.getenv("REDIS_PASSWORD", "")** with your password.
+          from your env file and Redis host in **self.redis_host = os.getenv("REDIS_HOST", "redis-stack-server")**
 
+      ```python
+      # Set your password here. The password is in your env file
+      self.redis_password = os.getenv("REDIS_PASSWORD", "")
+
+      # Remember to use Docker host name
+      self.redis_host = os.getenv("REDIS_HOST", "redis-stack-server")
+      ```
+
+3. To able to use config.yaml to feed Auto-GPT with starting data you need to change
+this line  SAVE_FILE = os.path.join(os.path.dirname(__file__), '..', 'config.yaml') in script/ai_config.py. 
+
+      ```python
+      # From this
+      SAVE_FILE = os.path.join(os.path.dirname(__file__), '..', 'config.yaml')
+
+      # To this
+      SAVE_FILE = os.path.join(os.path.dirname(__file__), '', 'config.yaml')
+      ```
 
 ### Activating python script
 
@@ -356,3 +378,27 @@ Stay up-to-date with the latest news, updates, and insights about Auto-GPT by fo
 - **Entrepreneur-GPT**: Join the conversation with the AI itself by following [@En_GPT](https://twitter.com/En_GPT). Share your experiences, discuss the AI's outputs, and engage with the growing community of users.
 
 We look forward to connecting with you and hearing your thoughts, ideas, and experiences with Auto-GPT. Join us on Twitter and let's explore the future of AI together!
+
+## Development
+
+This step will set you up to develope and improve the code. If you just want to run the program, skip this step.
+
+### Windows Conda
+
+This requires you have installed Conda and activated an environment..
+We also need to use an software to write code with debugger. I recommend using Visual Studio Code. This also required that you have connected your debugger to your conda environment.
+
+This also require that you have an running docker with redis stack.
+
+1. Lets install some packages that we will need.
+
+   ```Bash
+   conda install -c conda-forge orjson
+   ```
+
+2. Uncomment Docker import # import docker in executor.py
+3. Start your docker stack with redis stack
+
+    ```Bash
+    docker-compose run --rm --name Assistant1 auto-gpt python main.py --speaker
+    ```

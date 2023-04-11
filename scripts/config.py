@@ -44,7 +44,9 @@ class Config(metaclass=Singleton):
 
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.use_azure = False
-        self.use_azure = os.getenv("USE_AZURE") == 'True'
+        ## This seems to be an bug, it activates Azure even 
+        # if the env var is set to False
+        self.use_azure = os.getenv("USE_AZURE") == 'False'
         if self.use_azure:
             self.openai_api_base = os.getenv("OPENAI_API_BASE")
             self.openai_api_version = os.getenv("OPENAI_API_VERSION")
@@ -67,14 +69,14 @@ class Config(metaclass=Singleton):
         # User agent headers to use when browsing web
         # Some websites might just completely deny request with an error code if no user agent was found.
         self.user_agent_header = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
-        self.redis_host = os.getenv("REDIS_HOST", "localhost")
+        self.redis_host = os.getenv("REDIS_HOST", "redis-stack-server")
         self.redis_port = os.getenv("REDIS_PORT", "6379")
-        self.redis_password = os.getenv("REDIS_PASSWORD", "")
+        self.redis_password = os.getenv("REDIS_PASSWORD", "1inf883n4")
         self.wipe_redis_on_start = os.getenv("WIPE_REDIS_ON_START", "True") == 'True'
         self.memory_index = os.getenv("MEMORY_INDEX", 'auto-gpt')
         # Note that indexes must be created on db 0 in redis, this is not configureable.
 
-        self.memory_backend = os.getenv("MEMORY_BACKEND", 'local')
+        self.memory_backend = os.getenv("MEMORY_BACKEND", 'redis')
         # Initialize the OpenAI API client
         openai.api_key = self.openai_api_key
 

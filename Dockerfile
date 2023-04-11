@@ -15,5 +15,7 @@ COPY .env /app
 # Install the required dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY config.yaml /app
+
 # Python script to run when the container launches
 CMD ["python", "main.py"]
