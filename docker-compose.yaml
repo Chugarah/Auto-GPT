@@ -31,7 +31,7 @@ services:
     ports:
       - '${REDIS_WEB_PORT}:8081' # Map Redis Commander port 8081 to host port, using the value of REDIS_WEB_PORT or defaulting to 8001
     depends_on:
-      - ${REDIS_ADDRESS}
+      - redis-stack-server
     env_file:
       - .env
 
@@ -39,7 +39,7 @@ services:
   auto-gpt:
     build: .
     depends_on:
-      - ${REDIS_ADDRESS}
+      - redis-stack-server
       - redis-commander
     environment:
       - PULSE_SERVER=pulseaudio
