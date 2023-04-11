@@ -3,12 +3,12 @@ version: '3'
 services:
   # Redis server service
   redis-stack-server:
-    image: redis/redis-stack-server # Use the official Redis Docker image
+    image: ${REDIS_IMAGE} # Use the official Redis Docker image
     ports:
       - '${REDIS_PORT:-6379}:6379' # Map Redis server port 6379 to host port 6379
     environment:
       REDISEARCH_ARGS: CONCURRENT_WRITE_MODE
-      WIPE_REDIS_ON_START: 'False'
+      WIPE_REDIS_ON_START: ${WIPE_REDIS_ON_START}
       REDIS_ARGS: "--requirepass ${REDIS_PASSWORD}"
     env_file:
       - .env
@@ -25,13 +25,13 @@ services:
   redis-commander:
     image: rediscommander/redis-commander:latest
     environment:
-      - REDIS_HOST=redis-stack-server
-      - REDIS_PORT=${REDIS_PORT:-6379}
-      - REDIS_WEB_PORT=${REDIS_WEB_PORT:-8001}
+      REDIS_HOST: ${REDIS_ADDRESS}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_WEB_PORT: ${REDIS_WEB_PORT:-8001}
     ports:
       - '${REDIS_WEB_PORT}:8081' # Map Redis Commander port 8081 to host port, using the value of REDIS_WEB_PORT or defaulting to 8001
     depends_on:
-      - redis-stack-server
+      - ${REDIS_ADDRESS}
     env_file:
       - .env
 
@@ -39,7 +39,7 @@ services:
   auto-gpt:
     build: .
     depends_on:
-      - redis-stack-server
+      - ${REDIS_ADDRESS}
       - redis-commander
     env_file:
       - .env

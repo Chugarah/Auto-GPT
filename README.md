@@ -162,33 +162,15 @@ We need to do some manual setup before we can run the program.
    self.use_azure = os.getenv("USE_AZURE") == 'False'
    ```
 
-2. If you are using other source of memory management then change self.memory_back end to your memory desired backend. The options today are local, redis, and pinecone.
-
-   ```python
-   self.memory_backend = os.getenv("MEMORY_BACKEND", 'redis')
-   ```
-
-      2.1. For Redis server stack. You need to provide password in 
-          **self.redis_password = os.getenv("REDIS_PASSWORD", "")** with your password.
-          from your env file and Redis host in **self.redis_host = os.getenv("REDIS_HOST", "redis-stack-server")**
-
-      ```python
-      # Set your password here. The password is in your env file
-      self.redis_password = os.getenv("REDIS_PASSWORD", "")
-
-      # Remember to use Docker host name
-      self.redis_host = os.getenv("REDIS_HOST", "redis-stack-server")
-      ```
-
-3. To able to use config.yaml to feed Auto-GPT with starting data you need to change
-this line  SAVE_FILE = os.path.join(os.path.dirname(__file__), '..', 'config.yaml') in script/ai_config.py. 
+2. To able to use config.yaml to feed Auto-GPT with starting data you need to change
+this line  SAVE_FILE = os.path.join(os.path.dirname(__file__), '..', 'config.yaml') in script/ai_config.py.
 
       ```python
       # From this
-      SAVE_FILE = os.path.join(os.path.dirname(__file__), '..', 'config.yaml')
+      SAVE_FILE = os.path.join(os.path.dirname(__file__), '..', os.getenv("CONFIG_YAM_FILE"))
 
       # To this
-      SAVE_FILE = os.path.join(os.path.dirname(__file__), '', 'config.yaml')
+      SAVE_FILE = os.path.join(os.path.dirname(__file__), '', os.getenv("CONFIG_YAM_FILE"))
       ```
 
 ### Activating python script

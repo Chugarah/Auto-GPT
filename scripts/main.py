@@ -18,6 +18,7 @@ import traceback
 import yaml
 import argparse
 import logging
+import os
 
 cfg = Config()
 
@@ -129,7 +130,7 @@ def print_assistant_thoughts(assistant_reply):
         print_to_console("Error: \n", Fore.RED, call_stack)
 
 
-def load_variables(config_file="config.yaml"):
+def load_variables(config_file=os.environ.get('CONFIG_YAM_FILE')):
     """Load variables from yaml file if it exists, otherwise prompt the user for input"""
     try:
         with open(config_file) as file:
