@@ -129,9 +129,13 @@ Do the following steps to run Auto-GPT in a Docker container:
     ```Bash
     # Enter the container Auto-GPT -- With a speaker
     docker-compose run --rm --name Assistant1 auto-gpt
+      ```
 
-    # With Speaker
-    docker-compose run --rm --name Assistant1 auto-gpt python main.py --speaker
+    4.1 To enable Docker with sound you need to run the following command:
+
+      ```Bash
+      # With Speaker
+      docker-compose run --rm --name Assistant1 auto-gpt python main.py --speak
       ```
 
 5. Shutdown & Restart

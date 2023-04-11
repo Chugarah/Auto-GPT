@@ -41,10 +41,13 @@ services:
     depends_on:
       - ${REDIS_ADDRESS}
       - redis-commander
+    environment:
+      - PULSE_SERVER=pulseaudio
     env_file:
       - .env
     volumes:
       - ./config.yaml:/app/config.yaml:rw
+      - ./auto_gpt_workspace:/app/auto_gpt_workspace
     command: python main.py
 
 # Define named volumes for Redis data storage (optional)

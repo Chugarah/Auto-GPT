@@ -1,4 +1,6 @@
 ai_goals:
-- Make more coffee
-ai_name: Pr
-ai_role: I am an coffee bot and I am expert at making coffee. I can make coffee for you.
+- Webscraper. Getting code from Gihub
+- "Search Stackoverflow, Google and Ohter sources f\xF6r Script"
+- Script that is getting code and converted into PDF using Python
+ai_name: Avina
+ai_role: Python Programmer
