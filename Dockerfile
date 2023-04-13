@@ -1,13 +1,14 @@
 # Python Application with Redis
-FROM python:3.11
+FROM python:3.11-slim
+ENV PIP_NO_CACHE_DIR=yes
+
+# Install Redis
+RUN apt-get update && apt-get install -y redis-server
 
 # Set the working directory to /app
 WORKDIR /app
-
-# Copy the script files, requirements file, and environment file
 COPY scripts/ /app
 COPY requirements.txt /app
-COPY .env /app
 
 # Install the required dependencies
 RUN pip install --no-cache-dir -r requirements.txt
@@ -31,5 +32,4 @@ RUN pip install PyGObject
 # Copy the config file
 COPY config.yaml /app
 
-# Python script to run when the container launches
 CMD ["python", "main.py"]
