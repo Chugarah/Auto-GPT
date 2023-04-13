@@ -4,10 +4,12 @@ from config import AbstractSingleton, Config
 import openai
 cfg = Config()
 
-
+# https://platform.openai.com/docs/models/model-endpoint-compatibility
 def get_ada_embedding(text):
     text = text.replace("\n", " ")
-    if cfg.use_azure:
+    # Here it seems to be an bug, even if it says false it still takes as true
+    # Changing
+    if cfg.use_azure == True:
         return openai.Embedding.create(input=[text], engine=cfg.azure_embeddigs_deployment_id, model="text-embedding-ada-002")["data"][0]["embedding"]
     else:
         return openai.Embedding.create(input=[text], model="text-embedding-ada-002")["data"][0]["embedding"]

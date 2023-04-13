@@ -180,7 +180,6 @@ def load_variables(config_file=os.environ.get('CONFIG_YAM_FILE')):
     full_prompt += f"\n\n{prompt}"
     return full_prompt
 
-
 def construct_prompt():
     """Construct the prompt for the AI to respond to"""
     config = AIConfig.load()

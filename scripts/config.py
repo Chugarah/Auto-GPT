@@ -43,10 +43,9 @@ class Config(metaclass=Singleton):
         self.smart_token_limit = int(os.getenv("SMART_TOKEN_LIMIT", 8000))
 
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
-        self.use_azure = False
         ## This seems to be an bug, it activates Azure even 
         # if the env var is set to False
-        self.use_azure = os.getenv("USE_AZURE") == 'False'
+        self.use_azure = os.getenv("USE_AZURE")
         if self.use_azure:
             self.openai_api_base = os.getenv("OPENAI_AZURE_API_BASE")
             self.openai_api_version = os.getenv("OPENAI_AZURE_API_VERSION")
@@ -80,7 +79,7 @@ class Config(metaclass=Singleton):
         self.redis_port = os.getenv("REDIS_PORT", os.getenv('REDIS_PORT'))
         self.redis_password = os.getenv("REDIS_PASSWORD", os.getenv('REDIS_PASSWORD'))
         self.wipe_redis_on_start = os.getenv("WIPE_REDIS_ON_START", "True") == 'True'
-        self.memory_index = os.getenv("MEMORY_INDEX", 'auto-gpt')
+        self.memory_index = os.getenv("MEMORY_INDEX", os.getenv('REDIS_INDEX'))
         # Note that indexes must be created on db 0 in redis, this is not configureable.
 
         self.memory_backend = os.getenv("MEMORY_BACKEND", os.getenv('MEMORY_BACKEND_ENGINE'))
