@@ -1,9 +1,9 @@
 # Auto-GPT: An Autonomous GPT-4 Experiment
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/Torantulino/auto-gpt?style=social)
-![Twitter Follow](https://img.shields.io/twitter/follow/siggravitas?style=social)
-[![](https://dcbadge.vercel.app/api/server/PQ7VX6TY4t?style=flat)](https://discord.gg/PQ7VX6TY4t)
-[![Unit Tests](https://github.com/Torantulino/Auto-GPT/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/Torantulino/Auto-GPT/actions/workflows/unit_tests.yml)
+[![Twitter Follow](https://img.shields.io/twitter/follow/siggravitas?style=social)](https://twitter.com/SigGravitas)
+[![Discord Follow](https://dcbadge.vercel.app/api/server/autogpt?style=flat)](https://discord.gg/autogpt)
+[![Unit Tests](https://github.com/Torantulino/Auto-GPT/actions/workflows/ci.yml/badge.svg)](https://github.com/Torantulino/Auto-GPT/actions/workflows/ci.yml)
 
 Auto-GPT is an experimental open-source application showcasing the capabilities of the GPT-4 language model. This program, driven by GPT-4, chains together LLM "thoughts", to autonomously achieve whatever goal you set. As one of the first examples of GPT-4 running fully autonomously, Auto-GPT pushes the boundaries of what is possible with AI.
 
@@ -36,8 +36,6 @@ Your support is greatly appreciated
   - [🚀 Features](#-features)
   - [📋 Requirements](#-requirements)
   - [💾 Installation](#-installation)
-    - [Docker Installation](#docker-installation)
-- [To remove all unused images](#to-remove-all-unused-images)
   - [🔧 Usage](#-usage)
     - [Preparing Environment](#preparing-environment)
     - [Activating python script](#activating-python-script)
@@ -46,9 +44,7 @@ Your support is greatly appreciated
   - [🔍 Google API Keys Configuration](#-google-api-keys-configuration)
     - [Setting up environment variables](#setting-up-environment-variables)
   - [Redis Setup](#redis-setup)
-  - [⚠️ Limitations](#️-limitations)
-  - [🛡 Disclaimer](#-disclaimer)
-  - [🐦 Connect with Us on Twitter](#-connect-with-us-on-twitter)
+- [Or, if you want to run flake8 with the same configuration as the CI:](#or-if-you-want-to-run-flake8-with-the-same-configuration-as-the-ci)
 
 
 ## 🚀 Features
@@ -67,30 +63,33 @@ Your support is greatly appreciated
 
 Optional:
 
-- ElevenLabs Key (If you want the AI to speak)
+- [ElevenLabs Key](https://elevenlabs.io/) (If you want the AI to speak)
 
 ## 💾 Installation
 
 To install Auto-GPT, follow these steps:
 
-0. Make sure you have all the **requirements** above, if not, install/get them.
+1. Make sure you have all the **requirements** above, if not, install/get them.
 
 *The following commands should be executed in a CMD, Bash or Powershell window. To do this, go to a folder on your computer, click in the folder path at the top and type CMD, then press enter.*
 
 1. Clone the repository:
-For this step you need Git installed, but you can just download the zip file instead by clicking the button at the top of this page ☝️
+   For this step you need Git installed, but you can just download the zip file instead by clicking the button at the top of this page ☝️
+
 ```
 git clone https://github.com/Torantulino/Auto-GPT.git
 ```
 
-2. Navigate to the project directory:
-*(Type this into your CMD window, you're aiming to navigate the CMD window to the repository you just downloaded)*
+1. Navigate to the project directory:
+   _(Type this into your CMD window, you're aiming to navigate the CMD window to the repository you just downloaded)_
+
 ```
 cd 'Auto-GPT'
 ```
 
-3. Install the required dependencies:
-*(Again, type this into your CMD window)*
+4. Install the required dependencies:
+   _(Again, type this into your CMD window)_
+
 ```
 pip install -r requirements.txt
 ```
@@ -99,46 +98,13 @@ pip install -r requirements.txt
 
   - Obtain your OpenAI API key from: https://platform.openai.com/account/api-keys.
   - Obtain your ElevenLabs API key from: https://elevenlabs.io. You can view your xi-api-key using the "Profile" tab on the website.
-  - If you want to use GPT on an Azure instance, set `USE_AZURE` to `True` and provide the `OPENAI_AZURE_API_BASE`, `OPENAI_AZURE_API_VERSION` and `OPENAI_AZURE_DEPLOYMENT_ID` values as explained here: https://pypi.org/project/openai/ in the `Microsoft  Azure Endpoints` section
-
-### Docker Installation
-
-Do the following steps to run Auto-GPT in a Docker container:
-
-1. Be sure to have run Installation steps and have a `.env` file in the root directory filled with data from step 3 under Naive Installation.
-2. Don't forget to change your config.py file to match your needs.
-3. In your project folder, run the following command:
-
-    ```Bash
-    # To build the docker image
-    docker-compose build
-    ```
-
-4. Running Our Container
-
-    ```Bash
-    # Enter the container Auto-GPT -- With a speaker
-    docker-compose run --rm --name Assistant1 auto-gpt
-
-    # With Speaker
-    docker-compose run --rm --name Assistant1 auto-gpt python main.py --speaker
-      ```
-
-5. Shutdown & Restart
-
-    ```Bash
-    # To shutdown the container &
-    docker-compose down
-    
-    # To remove all stopped containers:
-    docker container prune
-
-   # To remove all unused images
-    docker image prune
-
-    # WARNING- THIS WILL DELETE VOLUMES
-    docker volume prune
-      ```
+  - If you want to use GPT on an Azure instance, set `USE_AZURE` to `True` and then:
+    - Rename `azure.yaml.template` to `azure.yaml` and provide the relevant `azure_api_base`, `azure_api_version` and all of the deployment ids for the relevant models in the `azure_model_map` section:
+      - `fast_llm_model_deployment_id` - your gpt-3.5-turbo or gpt-4 deployment id
+      - `smart_llm_model_deployment_id` - your gpt-4 deployment id
+      - `embedding_model_deployment_id` - your text-embedding-ada-002 v2 deployment id
+    - Please specify all of these values as double quoted strings
+    - details can be found here: https://pypi.org/project/openai/ in the `Microsoft Azure Endpoints` section and here: https://learn.microsoft.com/en-us/azure/cognitive-services/openai/tutorials/embeddings?tabs=command-line for the embedding model.
 
 ## 🔧 Usage
 
@@ -175,7 +141,7 @@ python scripts/main.py
 
 ### Logs
 
-You will find activity and error logs in the folder `./logs`
+You will find activity and error logs in the folder `./output/logs`
 
 To output debug logs:
 
@@ -260,7 +226,7 @@ MEMORY_INDEX=whatever
 
 Pinecone enables the storage of vast amounts of vector-based memory, allowing for only relevant memories to be loaded for the agent at any given time.
 
-1. Go to app.pinecone.io and make an account if you don't already have one.
+1. Go to [pinecone](https://app.pinecone.io/) and make an account if you don't already have one.
 2. Choose the `Starter` plan to avoid being charged.
 3. Find your API key and region under the default project in the left sidebar.
 
@@ -285,6 +251,16 @@ export PINECONE_ENV="Your pinecone region" # something like: us-east4-gcp
 
 ```
 
+
+## Setting Your Cache Type
+
+By default Auto-GPT is going to use LocalCache instead of redis or Pinecone.
+
+To switch to either, change the `MEMORY_BACKEND` env variable to the value that you want:
+
+`local` (default) uses a local JSON cache file
+`pinecone` uses the Pinecone.io account you configured in your ENV settings
+`redis` will use the redis cache that you configured
 
 ## View Memory Usage
 
@@ -356,3 +332,33 @@ Stay up-to-date with the latest news, updates, and insights about Auto-GPT by fo
 
 We look forward to connecting with you and hearing your thoughts, ideas, and experiences with Auto-GPT. Join us on Twitter and let's explore the future of AI together!
 
+<p align="center">
+  <a href="https://star-history.com/#Torantulino/auto-gpt&Date">
+    <img src="https://api.star-history.com/svg?repos=Torantulino/auto-gpt&type=Date" alt="Star History Chart">
+  </a>
+</p>
+
+## Run tests
+
+To run tests, run the following command:
+
+```
+python -m unittest discover tests
+```
+
+To run tests and see coverage, run the following command:
+
+```
+coverage run -m unittest discover tests
+```
+
+## Run linter
+
+This project uses [flake8](https://flake8.pycqa.org/en/latest/) for linting. To run the linter, run the following command:
+
+```
+flake8 scripts/ tests/
+
+# Or, if you want to run flake8 with the same configuration as the CI:
+flake8 scripts/ tests/ --select E303,W293,W291,W292,E305
+```

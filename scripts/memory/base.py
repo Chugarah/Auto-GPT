@@ -2,6 +2,7 @@
 import abc
 from config import AbstractSingleton, Config
 import openai
+
 cfg = Config()
 
 # https://platform.openai.com/docs/models/model-endpoint-compatibility
