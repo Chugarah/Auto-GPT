@@ -9,7 +9,7 @@ WORKSPACE_FOLDER = "auto_gpt_workspace"
 def execute_python_file(file):
     """Execute a Python file in a Docker container and return the output"""
 
-    print (f"Executing file '{file}' in workspace '{WORKSPACE_FOLDER}'")
+    print(f"Executing file '{file}' in workspace '{WORKSPACE_FOLDER}'")
 
     if not file.endswith(".py"):
         return "Error: Invalid file type. Only .py files are allowed."
@@ -27,7 +27,8 @@ def execute_python_file(file):
             client.images.get(image_name)
             print(f"Image '{image_name}' found locally")
         except docker.errors.ImageNotFound:
-            print(f"Image '{image_name}' not found locally, pulling from Docker Hub")
+            print(
+                f"Image '{image_name}' not found locally, pulling from Docker Hub")
             # Use the low-level API to stream the pull response
             low_level_client = docker.APIClient()
             for line in low_level_client.pull(image_name, stream=True, decode=True):
@@ -72,11 +73,12 @@ def execute_shell(command_line):
 
     current_dir = os.getcwd()
 
-    if not WORKSPACE_FOLDER in current_dir: # Change dir into workspace if necessary
+    if not WORKSPACE_FOLDER in current_dir:  # Change dir into workspace if necessary
         work_dir = os.path.join(os.getcwd(), WORKSPACE_FOLDER)
         os.chdir(work_dir)
 
-    print (f"Executing command '{command_line}' in working directory '{os.getcwd()}'")
+    print(
+        f"Executing command '{command_line}' in working directory '{os.getcwd()}'")
 
     result = subprocess.run(command_line, capture_output=True, shell=True)
     output = f"STDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
