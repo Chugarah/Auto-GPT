@@ -34,7 +34,8 @@ def ingest_directory(directory, memory, args):
         for file in files:
             ingest_file(file, memory, args.max_length, args.overlap)
     except Exception as e:
-        logger.error(f"Error while ingesting directory '{directory}': {str(e)}")
+        logger.error(
+            f"Error while ingesting directory '{directory}': {str(e)}")
 
 
 def main() -> None:
@@ -84,7 +85,8 @@ def main() -> None:
             ingest_directory(args.dir, memory, args)
             logger.info(f"Directory '{args.dir}' ingested successfully.")
         except Exception as e:
-            logger.error(f"Error while ingesting directory '{args.dir}': {str(e)}")
+            logger.error(
+                f"Error while ingesting directory '{args.dir}': {str(e)}")
     else:
         logger.warn(
             "Please provide either a file path (--file) or a directory name (--dir)"

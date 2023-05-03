@@ -25,7 +25,7 @@ services:
   redis-commander:
     image: rediscommander/redis-commander:latest
     environment:
-      REDIS_HOST: ${REDIS_ADDRESS}
+      REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT:-6379}
       REDIS_WEB_PORT: ${REDIS_WEB_PORT:-8001}
     ports:
@@ -42,14 +42,13 @@ services:
       - redis-stack-server
       - redis-commander
     environment:
-      - PULSE_SERVER=pulseaudio
+      MEMORY_BACKEND: ${MEMORY_BACKEND:-redis}
+      REDIS_HOST: ${REDIS_HOST:-redis}
     env_file:
       - .env
     volumes:
-      - ./config.yaml:/app/config.yaml:rw
-      - ./auto_gpt_workspace:/app/auto_gpt_workspace
-    command: python main.py
-
+      - ./:/app
+    profiles: ["exclude-from-up"]
 # Define named volumes for Redis data storage (optional)
 volumes:
   redis-data:
